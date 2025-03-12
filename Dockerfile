@@ -8,18 +8,24 @@ RUN apt-get update && \
 # Set the working directory
 WORKDIR /app
 
+# Use ARG to accept build-time variables
 ARG GROQ_API_KEY
-RUN echo $GROQ_API_KEY
+# Set the environment variable at runtime
+ENV GROQ_API_KEY=${GROQ_API_KEY}
+
 # Copy the requirements file
 COPY requirements.txt .
 
 # Install Python dependencies
-RUN python -m venv venv
-RUN . venv/bin/activate
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m venv venv && \
+    . venv/bin/activate && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code
 COPY . .
+
+# Ensure environment variable is available at runtime
+RUN echo "GROQ_API_KEY=$GROQ_API_KEY" >> /etc/environment
 
 # Command to run the application
 CMD ["python", "app.py"]
