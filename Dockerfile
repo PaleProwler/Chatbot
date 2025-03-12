@@ -25,6 +25,6 @@ RUN python -m venv venv && \
 COPY . .
 
 # Ensure environment variable is available at runtime
-RUN export GROQ_API_KEY=$GROQ_API_KEY"
+RUN export GROQ_API_KEY=$GROQ_API_KEY
 # Command to run the application
 CMD ["python", "app.py"]
